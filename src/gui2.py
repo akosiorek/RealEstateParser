@@ -37,8 +37,9 @@ class simpleapp_tk(Tkinter.Tk):
 		print "Procced entry"
 
 	def OpenFileName(self):
-		self.openFile = tkFileDialog.askopenfilename(**self.file_opt)
+		self.openFile = tkFileDialog.askopenfilenames(**self.file_opt)
 		self.text1.set(self.openFile)
+		print self.tk.splitlist(self.openFile)
 
 	def SaveFileName(self):
 		self.saveFile = tkFileDialog.asksaveasfilename(**self.file_opt)
