@@ -114,7 +114,7 @@ def main():
     # print 'doc_headers'
     # for key in findKeys(doc_headers):
     #     print key
-    # print findKeys(doc_headers)
+    print findKeys(doc_headers)
 
     # DEBUG
     # print ''
@@ -125,46 +125,46 @@ def main():
     # we have to tokenize them and save appropriately
     # estate_data contain estate doc_headers
     # prop_packs contain lists of properties for each estate
-    estate_data = []
-    prop_packs = []
-    for estate in real_estates:
-        # print estate
-        estate_header = []
-        for line in estate[0].split('\n'):
-              estate_header.append([part.strip() for part in line.split(sep, 1)])
-
-        # print estate_header
-
-        formatted_estate = []
-        estate_data.append(formatted_estate)
-
-        prop = False
-        for line in estate_header:
-            if line == ['']:
-                continue
-            if len(line) == 2 and not line[1]:
-                prop = True
-
-            if not prop:
-                    formatted_estate.append(line)
-            elif len(line) == 2 and not line[1]:
-                prop_entry = [['Typ', line[0]]]
-                prop_packs.append(prop_entry)
-            else:
-                prop_entry.append(line)
-
-    # for estate in estate_data:
-    #     print ''
-    #     printArr(estate)
-
-    header_keys = findKeys(doc_headers, 0)
-    offset = len(header_keys.keys())
-    document_keys = findKeys(estate_data, offset)
-    offset += len(document_keys.keys())
-    prop_keys = findKeys(prop_packs, offset)
-
-    print header_keys
-    print document_keys
+    # estate_data = []
+    # prop_packs = []
+    # for estate in real_estates:
+    #     # print estate
+    #     estate_header = []
+    #     for line in estate[0].split('\n'):
+    #           estate_header.append([part.strip() for part in line.split(sep, 1)])
+    #
+    #     # print estate_header
+    #
+    #     formatted_estate = []
+    #     estate_data.append(formatted_estate)
+    #
+    #     prop = False
+    #     for line in estate_header:
+    #         if line == ['']:
+    #             continue
+    #         if len(line) == 2 and not line[1]:
+    #             prop = True
+    #
+    #         if not prop:
+    #                 formatted_estate.append(line)
+    #         elif len(line) == 2 and not line[1]:
+    #             prop_entry = [['Typ', line[0]]]
+    #             prop_packs.append(prop_entry)
+    #         else:
+    #             prop_entry.append(line)
+    #
+    # # for estate in estate_data:
+    # #     print ''
+    # #     printArr(estate)
+    #
+    # header_keys = findKeys(doc_headers, 0)
+    # offset = len(header_keys.keys())
+    # document_keys = findKeys(estate_data, offset)
+    # offset += len(document_keys.keys())
+    # prop_keys = findKeys(prop_packs, offset)
+    #
+    # print header_keys
+    # print document_keys
     # print prop_keys
 
     # key_map = dict(header_keys.items() + document_keys.items() + prop_keys.items())
