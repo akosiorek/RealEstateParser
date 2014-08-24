@@ -51,6 +51,15 @@ def RecursiveSplit(file, sep):
 
     return file
 
+def RecursiveCount(file):
+    count = 0
+    if file.parts and len(file.parts):
+        if isinstance(file.parts[0], Document):
+            for document in file.parts:
+                    count += RecursiveCount(document)
+        else:
+            count += len(file.parts)
+    return count
 
 
 
@@ -68,20 +77,14 @@ def findKeys(data, offset = 0):
             keys[key] = offset + len(keys.keys())
     return keys
 
-# def findKeysList(data, access_method, offset = 0):
-#     keys = {}
-#     for elem in data:
-#         partial_keys = findKeys(access_method(elem))
-#         for key in partial_keys:
-#             if not keys.has_key(key):
-#                 keys[key] = offset + len(keys.keys())
-#     return keys
-
 def findKeysList(data, access_method, offset = 0):
     keys = {}
+    if isinstance(access_method, (tuple, list)) and len(access_method) == 1:
+        access_method = access_method[0]
+
     for elem in data:
         if access_method and isinstance(access_method, (list, tuple)):
-            partial_keys = findKeysList(access_method[0](data), access_method[1:], offset)
+            partial_keys = findKeysList(access_method[0](elem), access_method[1:])
         else:
           partial_keys = findKeys(access_method(elem))
 
@@ -89,8 +92,8 @@ def findKeysList(data, access_method, offset = 0):
         for key in partial_keys:
             if not keys.has_key(key):
                 keys[key] = offset + len(keys.keys())
-    return keys
 
+    return keys
 
 def getFilepaths():
     input_file = ''
@@ -216,76 +219,66 @@ def main():
 
 
     RecursiveSplit(file, SEP)
-    # print file.header
-    print file.parts[0].header
-    # print file.parts[0].parts[0].header
-    # print file.parts[0].parts[0].parts[0].header
-    # print file.parts[0].parts[0].parts[0].parts
-    # print file.parts[0].parts[0].parts[1].header
-    # print file.parts[0].parts[0].parts[1].parts
-    # print len(file.parts)
 
-    print findKeys(file.parts[0].header)
-    print findKeys(file.parts[0].parts[0].header)
-    print findKeys(file.parts[0].parts[0].parts[0].header)
+    accesor = [lambda x: x.header]
+    doc_keys = findKeysList(file.parts, accesor, 0)
 
-    # print findKeysList(file.parts, lambda x: x.header, 0)
-    #
-    # print findKeysList(file.parts, (lambda x: x.parts, lambda x: x.header), 0)
+    accesor = [lambda x:x.parts, lambda x:x.header]
+    estate_keys = findKeysList(file.parts, accesor, 0)
 
+    accesor = [lambda x:x.parts, lambda x:x.parts, lambda x:x.header]
+    obj_headers = findKeysList(file.parts, accesor, 0)
 
+    accesor = [lambda x:x.parts, lambda x:x.parts, lambda x:x.parts]
+    obj_keys = findKeysList(file.parts, accesor, 0)
 
+    doc_offset = 0
+    estate_offset = len(doc_keys.keys())
+    obj_offset = estate_offset + len(estate_keys.keys())
+    key_num = obj_offset + len(obj_keys.keys())
 
-    # file.__str__()
-    # print file.header
-    # for part in file.parts:
-    #     print part
-    #
-    # header_keys = findKeys(doc_headers, 0)
-    # offset = len(header_keys.keys())
-    # document_keys = findKeys(estate_data, offset)
-    # offset += len(document_keys.keys())
-    # prop_keys = findKeys(prop_packs, offset)
-    #
-    # print header_keys
-    # print document_keys
-    # print prop_keys
-
-    # key_map = dict(header_keys.items() + document_keys.items() + prop_keys.items())
-    # key_num = len(key_map.keys())
-    # print key_map
+    offsets = (doc_offset, estate_offset, obj_offset)
+    keys = (doc_keys, estate_keys, obj_keys)
 
 
-    # counter = 0
-    # for pack in prop_packs:
-    #     counter += len(pack)
-    #
-    # row = ['',] * key_num
-    # rows = [list(row),]
-    #
-    # for key in key_map:
-    #     rows[0][key_map[key]] = key
-    #
-    # print rows
-    #
-    # for head, doc, pack in zip(doc_headers, estate_data, prop_packs):
-    #     for props in pack:
-    #         entry = list(row)
-    #         rows.append(entry)
-    #         print ''
-    #         print doc
-    #         print ''
-    #
-    #         for pair in head + doc + pack:
-    #             entry[key_map[pair[0]]] = pair[1]
-    #
-    # print rows
-    #
-    #
-    # with open(output_file, 'w') as file:
-    #     for row in rows:
-    #         file.write(','.join(row))
-    #         file.write('\n')
+    # obj_count = RecursiveCount(file)
+
+    row = ['',] * (key_num + 1)
+    rows = [list(row),]
+
+    for keys, offset in zip(keys, offsets):
+        for key in keys:
+            rows[0][offset + keys[key]] = key
+
+    rows[0][-1] = 'Typ'
+
+    print rows
+
+    for doc in file.parts:
+        for estate in doc.parts:
+            for obj in estate.parts:
+                current_row = list(row)
+                for line in doc.header:
+                    current_row[doc_keys[line[0]] + doc_offset] = line[1]
+
+                for line in estate.header:
+                    current_row[estate_keys[line[0]] + estate_offset] = line[1]
+
+                for line in obj.header:
+                    current_row[-1] = line[0]
+
+                for line in obj.parts:
+                    current_row[obj_keys[line[0]] + obj_offset] = line[1]
+                    
+                rows.append(current_row)
+
+    print rows
+
+
+    with open(output_file, 'w') as file:
+        for row in rows:
+            file.write(','.join(row))
+            file.write('\n')
 
 
 
