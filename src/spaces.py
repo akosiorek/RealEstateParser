@@ -12,7 +12,6 @@ DOCUMENT = "!DOCUMENT!"
 ESTATE = "!ESTATE!"
 SEP = "!SEPARATOR!"
 SEPARATORS = [SEP, DOCUMENT, ESTATE]
-NIERUCHOMOSC = 'Nieru'
 
 doc_sep  = '====================================================================== :'
 estate_sep = '---------------------------------------------------------------------- :'
@@ -122,8 +121,8 @@ def prepareData(text):
 
         # deal with multi-line values
         # tackles the most obvious cases only
-        if counted_spaces_text and line.strip() and len(line.split(SEP, 1)) != 2 and not line.strip() in SEPARATORS:
-            counted_spaces_text[-1][1] += line
+        if counted_spaces_text and line.strip() and len(line.split(SEP, 1)) != 2 and (not line.strip() in SEPARATORS):
+            counted_spaces_text[-1][1] += re.sub('\s+', ' ', line)
         else:
            counted_spaces_text\
             .append([len(line) - len(line.lstrip(' ')), line.strip()])
@@ -240,9 +239,6 @@ def main():
     offsets = (doc_offset, estate_offset, obj_offset)
     keys = (doc_keys, estate_keys, obj_keys)
 
-
-    # obj_count = RecursiveCount(file)
-
     row = ['',] * (key_num + 1)
     rows = [list(row),]
 
@@ -252,32 +248,32 @@ def main():
 
     rows[0][-1] = 'Typ'
 
-    print rows
+    # print rows
 
     for doc in file.parts:
         for estate in doc.parts:
             for obj in estate.parts:
                 current_row = list(row)
                 for line in doc.header:
-                    current_row[doc_keys[line[0]] + doc_offset] = line[1]
+                    current_row[doc_keys[line[0]] + doc_offset] = line[1].strip()
 
                 for line in estate.header:
-                    current_row[estate_keys[line[0]] + estate_offset] = line[1]
+                    current_row[estate_keys[line[0]] + estate_offset] = line[1].strip()
 
                 for line in obj.header:
-                    current_row[-1] = line[0]
+                    current_row[-1] = line[0].strip()
 
                 for line in obj.parts:
-                    current_row[obj_keys[line[0]] + obj_offset] = line[1]
+                    current_row[obj_keys[line[0]] + obj_offset] = line[1].strip()
                     
                 rows.append(current_row)
 
-    print rows
+    # print rows
 
 
     with open(output_file, 'w') as file:
         for row in rows:
-            file.write(','.join(row))
+            file.write('|'.join(row))
             file.write('\n')
 
 
