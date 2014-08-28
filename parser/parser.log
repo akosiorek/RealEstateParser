@@ -1,0 +1,40 @@
+[main.py:163:  <module>:INFO] Start
+[main.py:24:getFilepaths:INFO] Returning /media/D/workspace/mama/parser/../data/gm.txt, /media/D/workspace/mama/parser/../data/gm_formated
+[main.py:28:prepareData:INFO] Preparing data
+[main.py:38:prepareData:INFO] Replaced white characters
+[main.py:53:prepareData:INFO] Elimnated multi-line values
+[main.py:61:prepareData:INFO] Returning
+[main.py:84:      main:INFO] Building document tree
+[main.py:152:      main:INFO] Line-splitting document tree
+[writer.py:106:  writeXLS:INFO] Starting
+[writer.py:109:  writeXLS:INFO] Creating workbook at /media/D/workspace/mama/parser/../data/gm_formated.xlsx
+[writer.py:113:  writeXLS:INFO] Finding keys
+[writer.py:22:findKeysList:INFO] Starting
+[writer.py:41:findKeysList:INFO] Returning
+[writer.py:22:findKeysList:INFO] Starting
+[writer.py:41:findKeysList:INFO] Returning
+[writer.py:22:findKeysList:INFO] Starting
+[writer.py:41:findKeysList:INFO] Returning
+[writer.py:134:  writeXLS:INFO] Dumping data
+[writer.py:180:  writeXLS:INFO] Finished
+[main.py:165:  <module>:INFO] Finished
+[main.py:163:  <module>:INFO] Start
+[main.py:24:getFilepaths:INFO] Returning /media/D/workspace/mama/parser/../data/gm.txt, /media/D/workspace/mama/parser/../data/gm_formated
+[main.py:28:prepareData:INFO] Preparing data
+[main.py:38:prepareData:INFO] Replaced white characters
+[main.py:53:prepareData:INFO] Elimnated multi-line values
+[main.py:61:prepareData:INFO] Returning
+[main.py:84:      main:INFO] Building document tree
+[main.py:152:      main:INFO] Line-splitting document tree
+[writer.py:106:  writeXLS:INFO] Starting
+[writer.py:109:  writeXLS:INFO] Creating workbook at /media/D/workspace/mama/parser/../data/gm_formated.xlsx
+[writer.py:113:  writeXLS:INFO] Finding keys
+[writer.py:22:findKeysList:INFO] Starting
+[writer.py:41:findKeysList:INFO] Returning
+[writer.py:22:findKeysList:INFO] Starting
+[writer.py:41:findKeysList:INFO] Returning
+[writer.py:22:findKeysList:INFO] Starting
+[writer.py:41:findKeysList:INFO] Returning
+[writer.py:134:  writeXLS:INFO] Dumping data
+[writer.py:180:  writeXLS:INFO] Finished
+[main.py:165:  <module>:INFO] Finished

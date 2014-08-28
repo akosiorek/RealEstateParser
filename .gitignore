@@ -1,3 +1,5 @@
 *.iml
 *.csv
-*/log.*
+*/log*
+*_format*
+*.pyc
