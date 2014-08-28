@@ -9,7 +9,7 @@ import re
 import logging
 
 DEBUG = False
-DEBUG = True
+# DEBUG = True
 
 
 def getFilepaths():

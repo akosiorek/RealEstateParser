@@ -1,5 +1,8 @@
 *.iml
 *.csv
-*/log*
+*.xslx
+*.log
 *_format*
 *.pyc
+dist/*
+build/*
