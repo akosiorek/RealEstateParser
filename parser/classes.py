@@ -1,4 +1,4 @@
-
+import re
 
 class Document(object):
     '''Composite for data storage. Stores real data as content and other container as parts.
@@ -108,3 +108,50 @@ class EntityExtractor(object):
     def clear_key_set(self):
         '''Resets key_set.'''
         self.key_set = set()
+
+
+
+class DocumentBuilder:
+    def __init__(self, line_sep, level_seps=()):
+        self.line_sep = line_sep
+
+        if isinstance(level_seps, (tuple, list)):
+            self.levels_sep = level_seps
+        else:
+            self.levels_sep = (level_seps,)
+
+    def get_lines(self, text):
+        return text.split(self.line_sep)
+
+    def extract_header(self, text):
+        return text.split(self.line_sep, 1)
+    
+    def split(self, data, sep):
+        if isinstance(sep, basestring):
+            splitted = [line.strip(self.line_sep) for line in data.split(sep)]
+        else:
+            pattern = '(' + '|'.join(sep) + ')'
+            splitted = [part.strip(self.line_sep) for part in re.split(pattern, data) if part.strip(self.line_sep)]
+            splitted = [part for part in splitted if not part in sep]
+        return splitted
+
+    def extract_parts_deeper(self, data, seps):
+        for i in xrange(len(data)):
+            if not isinstance(data[i], basestring):
+                data[i] = self.split(data[i][0], seps[0])
+                header = data[i][0]
+                data[i] = [[part,] for part in data[i][1:]]
+                data[i].insert(0, header)
+
+                if len(seps) > 1:
+                    self.extract_parts_deeper(data[i], seps[1:])
+
+    def extract_parts(self, text):
+        result = self.split(text, self.levels_sep[0])
+        result = [[part,] for part in result]
+        if len(self.levels_sep) > 1:
+            self.extract_parts_deeper(result, self.levels_sep[1:])
+
+
+
+        return result

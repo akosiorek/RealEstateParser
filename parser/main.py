@@ -61,9 +61,7 @@ def prepareData(text):
     logging.info('Returning')
     return counted_spaces_text
 
-def main():
-    input_file, output_file = getFilepaths()
-
+def main(input_file, output_file):
     with open(input_file, 'r') as file:
         text = file.read()
 
@@ -161,5 +159,8 @@ if __name__ == '__main__':
     FORMAT = "[%(filename)s:%(lineno)s:%(funcName)10s:%(levelname)s] %(message)s"
     logging.basicConfig(format=FORMAT, filename='parser.log', level=logging.INFO)
     logging.info('Start')
-    main()
+
+    input_file, output_file = getFilepaths()
+
+    main(input_file, output_file)
     logging.info('Finished')
