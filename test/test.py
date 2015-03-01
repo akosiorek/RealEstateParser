@@ -1,5 +1,5 @@
 import unittest
-from parser.classes import *
+from base_parser.classes import *
 
 class DocumentTest(unittest.TestCase):
 
