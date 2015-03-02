@@ -1,6 +1,6 @@
 import unittest
 
-from base_parser.classes import DocumentBuilder
+from parser.classes import DocumentBuilder
 
 
 class DocumentBuilderTest(unittest.TestCase):

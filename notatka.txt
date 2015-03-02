@@ -1,0 +1,1 @@
+- unikalny nr. aktu notarialnego; usuwać duplikaty

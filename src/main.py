@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: Windows-1250 -*-
 
-from writer import *
+from writer_old import *
 from config import *
 from classes import *
 
@@ -157,7 +157,7 @@ def main(input_file, output_file):
 
 if __name__ == '__main__':
     FORMAT = "[%(filename)s:%(lineno)s:%(funcName)10s:%(levelname)s] %(message)s"
-    logging.basicConfig(format=FORMAT, filename='parser.log', level=logging.INFO)
+    logging.basicConfig(format=FORMAT, filename='src.log', level=logging.INFO)
     logging.info('Start')
 
     input_file, output_file = getFilepaths()
