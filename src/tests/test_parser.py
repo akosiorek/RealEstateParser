@@ -10,6 +10,7 @@ projectDataFolder = os.path.join(os.path.join(os.getcwd(), os.pardir), os.pardir
 projectDataFolder = os.path.join(projectDataFolder, 'data/')
 shortTestFile = os.path.join(projectDataFolder, 'test.txt')
 longTestFile = os.path.join(projectDataFolder, 'gm.txt')
+entityTestFile = os.path.join(projectDataFolder, 'entity_test.txt')
 
 class BaseParserTest(unittest.TestCase):
 
@@ -55,6 +56,27 @@ class BaseParserTest(unittest.TestCase):
 #   3) a document without some levels
 #   4) a document with several same subdocuments without separation
 class SpaceParserTest(unittest.TestCase):
+    '''Document Structure:
+        Header
+            Property1=Value1
+            ...
+            SUBDOCUMENT:
+                Property1=Value1
+                ...
+                Dzialki:
+                    Property1=Value1
+                    ...
+                Nieruchomosci:
+                    Property1=Value1
+                    ...
+                Lokale:
+                    Property1=Value1
+                    ...
+                    Pomieszczenia przynalezne:
+                        Property1=Value1
+                        ...
+
+    '''
 
     def setUp(self):
         self.shortInput = open(shortTestFile)
@@ -82,7 +104,13 @@ class SpaceParserTest(unittest.TestCase):
         self.assertEqual(len(docs), 1)
         self.assertEqual(docs[0]['Dokument'], 'OA-810/2014 z dnia 2014.06.25')
         self.assertEqual(len(docs[0][self.parser.SUBDOCUMENT_KEY][0]), 7)
-        self.assertEqual(docs[0][self.parser.SUBDOCUMENT_KEY][0]['Dzia�ki']['adres(y)'], 'BUKWA�D 58')
+        self.assertEqual(docs[0][self.parser.SUBDOCUMENT_KEY][0]['Dzia�ki'][0]['adres(y)'], 'BUKWA�D 58')
+
+    def test_entity(self):
+        self.parser.feed(open(entityTestFile).read())
+        docs = self.parser.documents
+
+        self.parser.printDocument(docs, enumerate=True)
 
     def test_feed_long(self):
         with open(longTestFile) as longInput:

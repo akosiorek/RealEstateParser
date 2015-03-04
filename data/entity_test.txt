@@ -1,0 +1,40 @@
+RCiWN dla 2814042 Dywity
+
+Dokument             :AS-387/2013 z dnia 2013.12.16
+IRCW                 :2230
+Rodzaj zapisu        :Obr�t
+Forma obrotu         :Wolny rynek
+Strona sprzedaj�ca   :Osoba fizyczna
+Strona kupuj�ca      :Osoba fizyczna
+Warto��              :166�000.00 z�
+
+     Nieruchomo��              :lokalowa
+     Opis                      :BRAK INF O PODATKU VAT
+     Ksi�ga wieczysta          :KW 56817/0
+     Obr�b                     :11 - Myki
+     Nr zmiany                 :14/2014
+     Dzia�ki :
+         Numer                 :161/21
+         Powierzchnia          :2679 ( B 2679)
+         Rodzaj prawa          :Wsp�w�asno��
+         Udzia� w prawie       :415/10000
+         adres(y)              :S�UPY 56a
+     Budynki :
+         Numer                 :161/21;1
+         Funkcja podstawowa    :Mieszkalne
+         Rok zak. budowy       :1977
+         Rodzaj prawa          :W�asno��
+         Udzia� w prawie       :1/1
+         adres(y)              :S�UPY 56A
+     Lokale :
+         Numer                 :161/21;1,6
+         Funkcja podstawowa    :Mieszkalne
+         Ilo�� izb             :4
+         Powierzchnia u�ytkowa :73.80
+         Pomieszczenia przynale�ne :
+            Powierzchnia       :9
+            piwnica            :1
+         Rodzaj prawa          :Wsp�w�asno��
+         Udzia� w prawie       :1/1
+         adres(y)              :S�UPY 56A
+====================================================================== :

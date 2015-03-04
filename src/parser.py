@@ -87,11 +87,14 @@ class SpaceParser(BaseParser):
         self.documents = []
         self.currentDocument = None
         self.currentSubdocument = None
+        self.currentEntity = None
         self.header = None
         self.current0 = None
         self.current5 = None
         self.current9 = None
         BaseParser.reset(self)
+
+        self.jointLines = 0
 
     def parseLine(self, line):
         tag = len(line) - len(line.lstrip())
@@ -115,27 +118,37 @@ class SpaceParser(BaseParser):
         if self.currentSubdocument is None:
             self.currentSubdocument = {}
 
+        if self.currentEntity:
+            self.do_EntityEnd()
+
         self.current5 = value[0]
-        # self.currentDocument[self.SUBDOCUMENT_KEY][value[0]] = value[1]
         self.currentSubdocument[value[0]] = value[1]
 
     def do_9(self, value):
         if self.currentSubdocument[self.current5] == '':
-            self.currentSubdocument[self.current5] = {}
+            self.do_EntityEnd()
+            self.currentSubdocument[self.current5] = []
+            # self.currentEntity = {}
 
         self.current9 = value[0]
-        self.currentSubdocument[self.current5][value[0]] = value[1]
+        if value[0] in self.currentEntity:
+            self.currentSubdocument[self.current5].append(self.currentEntity)
+            self.currentEntity = {}
+
+        self.currentEntity[value[0]] = value[1]
+        # self.currentSubdocument[self.current5][value[0]] = value[1]
 
 
     def do_12(self, value):
-        if self.currentSubdocument[self.current5][self.current9] == '':
-            self.currentSubdocument[self.current5][self.current9] = {}
+        if self.currentEntity[self.current9] == '':
+            self.currentEntity[self.current9] = {}
 
-        self.currentSubdocument[self.current5][self.current9][value[0]] = value[1]
+        self.currentEntity[self.current9][value[0]] = value[1]
 
 
     def do_22(self, value):
         self.currentDocument[self.current0] += ' '.join(value)
+        self.jointLines += 1
 
     def do_31(self, value):
         self.currentTag = 32
@@ -145,8 +158,10 @@ class SpaceParser(BaseParser):
 
         if self.lastTag == 5:
             self.currentSubdocument[self.current5] += ' '.join(value)
+            self.jointLines += 1
         elif self.lastTag == 9:
-            self.currentSubdocument[self.current5][self.current9] += ' '.join(value)
+            self.currentEntity[self.current9] += ' '.join(value)
+            self.jointLines += 1
         else:
             print self.lastTag, self.line
             raise Exception()
@@ -158,13 +173,22 @@ class SpaceParser(BaseParser):
             self.currentDocument[self.SUBDOCUMENT_KEY] = []
 
     def do_DocumentEnd(self):
-        self.do_SubdocumentEnd()
-        self.documents.append(self.currentDocument)
+        if self.currentDocument:
+            self.do_SubdocumentEnd()
+            self.documents.append(self.currentDocument)
         self.currentDocument = {}
 
     def do_SubdocumentEnd(self):
-        self.currentDocument[self.SUBDOCUMENT_KEY].append(self.currentSubdocument)
+        if self.currentSubdocument:
+            self.do_EntityEnd()
+            self.currentDocument[self.SUBDOCUMENT_KEY].append(self.currentSubdocument)
         self.currentSubdocument = {}
+
+    def do_EntityEnd(self):
+        if self.currentEntity:
+            self.currentSubdocument[self.current5].append(self.currentEntity)
+        self.currentEntity = {}
+
 
     def printDocument(self, doc, indent='\t', enumerate=False):
         if type(doc) in (list, tuple):
@@ -179,28 +203,17 @@ class SpaceParser(BaseParser):
                     self.printDocument(v, indent + '\t')
                 elif type(v) == list:
                     print '%s%s:' %(indent, k)
-                    indent += '\t'
+                    # indent += '\t'
                     # for entry in v:
                     #     self.printDocument(entry, indent)
-                    self.printDocument(v, indent, enumerate)
+                    self.printDocument(v, indent + '\t', enumerate)
                 else:
                     print '%s%s:%s' %(indent, k, v)
 
-    # def printDocument(self, doc, indent='\t', enumerate=False):
-    #     if type(doc) in (list, tuple):
-    #         for entry in doc:
-    #             self.printDocument(entry, indent, enumerate)
-    #     elif type(doc) == dict:
-    #         indent += '\t'
-    #         for k, v in doc.items():
-    #             print '%s%s:%s' %(indent, k, v)
-    #             # self.printDocument(v, indent + '\t', enumerate)
-    #     else:
-    #         print '%s%s' %(indent, str(doc))
-
 
 if __name__ == '__main__':
-    print 'aha'
-    print getParser('base')
-    print getParser('space')
-    print getParser('')
+    import sys
+    parser = SpaceParser()
+    parser.feed(open(sys.argv[1]).read())
+    parser.printDocument(parser.documents)
+    # print parser.jointLines
