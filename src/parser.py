@@ -166,18 +166,38 @@ class SpaceParser(BaseParser):
         self.currentDocument[self.SUBDOCUMENT_KEY].append(self.currentSubdocument)
         self.currentSubdocument = {}
 
-    def printDocument(self, doc, indent='\t'):
-        for k, v in doc.items():
-            if type(v) == dict:
-                print '%s%s:' %(indent, k)
-                self.printDocument(v, indent + '\t')
-            elif type(v) == list:
-                print '%s%s:' %(indent, k)
-                indent += '\t'
-                for entry in v:
-                    self.printDocument(entry, indent)
-            else:
-                print '%s%s:%s' %(indent, k, v)
+    def printDocument(self, doc, indent='\t', enumerate=False):
+        if type(doc) in (list, tuple):
+            for (entry, num) in zip(doc, xrange(1, len(doc) + 1)):
+                if enumerate: print '%s%d:' %(indent, num)
+                self.printDocument(entry, indent, enumerate)
+
+        else:
+            for k, v in doc.items():
+                if type(v) == dict:
+                    print '%s%s:' %(indent, k)
+                    self.printDocument(v, indent + '\t')
+                elif type(v) == list:
+                    print '%s%s:' %(indent, k)
+                    indent += '\t'
+                    # for entry in v:
+                    #     self.printDocument(entry, indent)
+                    self.printDocument(v, indent, enumerate)
+                else:
+                    print '%s%s:%s' %(indent, k, v)
+
+    # def printDocument(self, doc, indent='\t', enumerate=False):
+    #     if type(doc) in (list, tuple):
+    #         for entry in doc:
+    #             self.printDocument(entry, indent, enumerate)
+    #     elif type(doc) == dict:
+    #         indent += '\t'
+    #         for k, v in doc.items():
+    #             print '%s%s:%s' %(indent, k, v)
+    #             # self.printDocument(v, indent + '\t', enumerate)
+    #     else:
+    #         print '%s%s' %(indent, str(doc))
+
 
 if __name__ == '__main__':
     print 'aha'

@@ -88,8 +88,9 @@ class SpaceParserTest(unittest.TestCase):
         with open(longTestFile) as longInput:
             self.parser.feed(longInput)
         docs = self.parser.documents
-        for doc in docs:
-            self.parser.printDocument(doc)
+        self.parser.printDocument(docs, enumerate=True)
+        # for doc in docs:
+        #     self.parser.printDocument(doc, enumerate=True)
 
 
 
