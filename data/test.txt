@@ -2,7 +2,7 @@ RCiWN dla 2814042 Dywity
 
 Dokument             :OA-810/2014 z dnia 2014.06.25
 IRCW                 :2304
-Rodzaj zapisu        :Obr�t
+Rodzaj zapisu        :Obrot
 Forma obrotu         :Wolny rynek
 Strona sprzedaj�ca   :Osoba fizyczna
 Strona kupuj�ca      :Osoba fizyczna
@@ -17,19 +17,19 @@ Warto��              :192�000.00 z�
          Numer                 :204/1
          Powierzchnia          :4171 ( Br/RIVa 2076 RIVa 2095)
          Rodzaj prawa          :W�asno��
-         Udzia� w prawie       :1/1
+         Udzial w prawie       :1/1
          adres(y)              :BUKWA�D 58
      Budynki :
          Numer                 :204/1;1
          Funkcja podstawowa    :Mieszkalne
          Rok zak. budowy       :1930
          Rodzaj prawa          :W�asno��
-         Udzia� w prawie       :1/1
+         Udzial w prawie       :1/1
          adres(y)              :BUKWA�D 58
          Numer                 :204/1;2
          Funkcja podstawowa    :Produkcyjne, us�ugowe i gospodarcze dla rolnictwa
          Rok zak. budowy       :1930
-         Rodzaj prawa          :W�asno��
-         Udzia� w prawie       :1/1
-         adres(y)              :BUKWA�D 58
+         Rodzaj prawa          :Wlasnosc
+         Udzial w prawie       :1/1
+         adres(y)              :BUK
 ====================================================================== :

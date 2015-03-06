@@ -1,0 +1,49 @@
+RCiWN dla 2814042 Dywity
+
+Dokument             :I�-426/2014 z dnia 2014.01.17
+IRCW                 :2227
+Rodzaj zapisu        :Obr�t
+Forma obrotu         :Wolny rynek
+Strona sprzedaj�ca   :Osoba prawna
+Strona kupuj�ca      :Osoba fizyczna
+Warto��              :345�000.00 z�
+
+     Nieruchomo��              :niezabudowana  jednou�ytkowa rolna
+     Opis                      :345000 W TYM PODATEK VAT NA DZIA�CE ZNAJDUJE SI�
+                                WOLNOSTOJ�CY ,NIEPODPIWNICZONY,PARTEROWY Z
+                                PODDASZEM U�YTKOWYM BUDYNEK MIESZKALNY O POW. U�
+                                150,70 M.KW W STANIE SUROWYM ZAMKNI�TYM
+     Rodzaj u�ytku             :grunty orne -R
+     Ksi�ga wieczysta          :OL1O/00160059/0
+     Obr�b                     :5 - Dywity
+     Dzia�ki :
+         Numer                 :80/29
+         Powierzchnia          :1126
+         Rodzaj prawa          :W�asno��
+         Udzia� w prawie       :1/1
+====================================================================== :
+Dokument             :I�-4299/2012 z dnia 2012.4.18
+IRCW                 :1781
+Rodzaj zapisu        :Obr�t
+Forma obrotu         :Wolny rynek
+Strona sprzedaj�ca   :Osoba prawna
+Strona kupuj�ca      :Osoba fizyczna
+Warto��              :130�158.00 z�
+
+     Nieruchomo��              :niezabudowana  wielou�ytkowa rolna
+     Ksi�ga wieczysta          :OL1O/00080517/4
+     Obci��enia                :S�u�ebno�� gruntowa
+                               :S�U�EBNO�� GRUNTOWA POLEGAJ�CA NA PRAWIE PRZEJ�CIA
+                                I PRZEJAZDU PRZEZ DZ. 97/46 ORAZ NA PRAWIE
+                                PRZEPROWADZENIA PRZEZ TEREN DZ. 97/46 INST.
+                                WODOCI�GOWEJ, KANALIZ.,ELEKTRYCZ, GAZOWEJ, TELEFON
+                                DO DROGI PUBLICZNEJ
+     Obr�b                     :11 - Myki
+     Nr zmiany                 :34/2012
+     Dzia�ki :
+         Numer                 :97/4
+         Powierzchnia          :2530 ( RVI 1275 PsVI 85 LsV 1170)
+         Funkcja dominuj�ca    :Tereny budownictwa mieszkaniowego jednorodzinnego
+         Rodzaj prawa          :W�asno��
+         Udzia� w prawie       :1/1
+====================================================================== :

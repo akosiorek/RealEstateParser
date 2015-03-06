@@ -6,7 +6,6 @@ import sys
 
 DEBUG = False
 
-
 def getParser(name):
     name = '%sParser' % (name.capitalize())
     parserClass = None
@@ -16,8 +15,11 @@ def getParser(name):
         raise NoSuchParserException
     return parserClass()
 
-class NoSuchParserException(Exception): pass
-class UnknownTagException(Exception): pass
+class ParseException(Exception): pass
+class InvalidInputException(ParseException): pass
+class NoSuchParserException(ParseException): pass
+class UnknownTagException(ParseException): pass
+class UnexpectedParseCaseException(ParseException): pass
 
 class BaseParser(object):
     def __init__(self, inputEncoding=None, outputEncoding=None):
@@ -28,65 +30,74 @@ class BaseParser(object):
         self.currentTag = None
         self.pieces = []
         self.line = 0
+        self.closeFileOnExit = False
         self.inputEncoding = True and inputEncoding or sys.getdefaultencoding()
         self.outputEncoding = True and outputEncoding or sys.getdefaultencoding()
 
     def handleUnknownTag(self, tag, value):
-        if value == ['']:
+        if self.isEmptyLine(value):
             self.do_EmptyLine()
         else:
             # raise UnknownTagException('Unknown tag: %s=%s at %d. line' % (str(tag), str(value), self.line))
             self.pieces.append((tag, value))
 
     def handleTag(self, tag, value):
-        self.line += 1
-        if tag != self.currentTag:
-            self.lastTag = self.currentTag
-            self.currentTag = tag
-        self.debug((tag, value))
         try:
-            getattr(self, 'do_' + str(tag))(value)
+            getattr(self, 'do_%s' %(tag))(value)
         except AttributeError:
             self.handleUnknownTag(tag, value)
 
-    def __prepare_string_input(self, text):
-        from StringIO import StringIO
-        return StringIO(text)
-
     def feed(self, input):
-        if type(input) == types.StringType:
-            input = self.__prepare_string_input(input)
+        if not hasattr(input, 'read'):
+            try:
+                if type(input) != str or len(input) == 0:
+                    raise InvalidInputException
+                input = open(input, 'r')
+                self.closeFileOnExit = True
+            except (OSError, IOError) as e:
+                from StringIO import StringIO
+                input = StringIO(input)
+
         self.__process(input)
 
     def __process(self, input):
-        data = input.read()
-        if self.inputEncoding:
-            data = self.decode(data)
-
-        lines = [self.parseLine(line) for line in data.split('\n')]
-
-        for tag, value in lines:
+        # TODO come up with a solution that does not require reading the whole file at once!
+        data = input.read().split('\n')
+        for line in data:
+            self.line += 1
+            if self.inputEncoding:
+                line = self.decode(line)
+            tag, value = self.parseLine(line)
+            if tag != self.currentTag:
+                self.lastTag, self.currentTag = self.currentTag, tag
+            self.debug((tag, value))
             self.handleTag(tag, value)
 
+        if self.closeFileOnExit:
+            input.close()
+            self.closeFileOnExit = False
+
     def parseLine(self, line):
-        parsed = str(line).split(':', 1)
-        if len(parsed) == 1: parsed.insert(0, 'tag')
-        return tuple(parsed)
+        '''Parse a single line'''
+        return (len(line), line.strip())
 
-    def debug(self, text=''):
-        if DEBUG: print self.line,': ', text
-
-    def do_EmptyLine(self):
-        pass
+    def isEmptyLine(self, value):
+        return value == ''
 
     def output(self):
-        pass
+        return [(tag, self.encode(content)) for (tag, content) in self.pieces]
 
     def decode(self, str):
         return str.decode(self.inputEncoding)
 
     def encode(self, str):
         return str.encode(self.outputEncoding)
+
+    def debug(self, text=''):
+        if DEBUG: print self.line,':', text
+
+    def do_EmptyLine(self):
+        pass
 
 
 # TODO: add level-wise keyword discovery
@@ -100,7 +111,6 @@ class SpaceParser(BaseParser):
         BaseParser.__init__(self, inputEncoding, outputEncoding)
 
     def reset(self, inputEncoding=None, outputEncoding=None):
-        self.documents = []
         self.currentDocument = None
         self.currentSubdocument = None
         self.currentEntity = None
@@ -111,10 +121,10 @@ class SpaceParser(BaseParser):
         self.keys = {}
         BaseParser.reset(self, inputEncoding, outputEncoding)
 
-        self.jointLines = 0
-
     def handleTag(self, tag, value):
         BaseParser.handleTag(self, tag, value)
+
+        # save unique keys for each tag
         if not tag in self.keys:
             self.keys[tag] = set()
         self.keys[tag].add(value[0])
@@ -123,6 +133,9 @@ class SpaceParser(BaseParser):
         tag = len(line) - len(line.lstrip())
         line = [part.strip() for part in line.split(':')]
         return (tag, line)
+
+    def isEmptyLine(self, value):
+        return len(value) == 0 or len(value) == 1 and value[0] == ''
 
     def do_0(self, value):
         if not self.header:
@@ -151,7 +164,6 @@ class SpaceParser(BaseParser):
         if self.currentSubdocument[self.current5] == '':
             self.do_EntityEnd()
             self.currentSubdocument[self.current5] = []
-            # self.currentEntity = {}
 
         self.current9 = value[0]
         if value[0] in self.currentEntity:
@@ -170,7 +182,6 @@ class SpaceParser(BaseParser):
 
     def do_22(self, value):
         self.currentDocument[self.current0] += ' '.join(value)
-        self.jointLines += 1
 
     def do_31(self, value):
         self.currentTag = 32
@@ -179,14 +190,12 @@ class SpaceParser(BaseParser):
     def do_32(self, value):
 
         if self.lastTag == 5:
-            self.currentSubdocument[self.current5] += ' '.join(value)
-            self.jointLines += 1
+            self.currentSubdocument[self.current5] += ' ' + ' '.join(value).strip()
         elif self.lastTag == 9:
-            self.currentEntity[self.current9] += ' '.join(value)
-            self.jointLines += 1
+            self.currentEntity[self.current9] += ' ' + ' '.join(value).strip()
         else:
-            print self.lastTag, self.line
-            raise Exception()
+            # print self.lastTag, self.line
+            raise UnexpectedParseCaseException
 
     def do_EmptyLine(self):
         if self.currentDocument is None:
@@ -197,7 +206,7 @@ class SpaceParser(BaseParser):
     def do_DocumentEnd(self):
         if self.currentDocument:
             self.do_SubdocumentEnd()
-            self.documents.append(self.currentDocument)
+            self.pieces.append(self.currentDocument)
         self.currentDocument = {}
 
     def do_SubdocumentEnd(self):
@@ -211,6 +220,10 @@ class SpaceParser(BaseParser):
             self.currentSubdocument[self.current5].append(self.currentEntity)
         self.currentEntity = {}
 
+    def output(self, encode=False):
+        if encode:
+            return self.mapEntries(self.pieces, self.encode, self.encode)
+        return self.pieces
 
     def printDocument(self, doc, indent='\t', enumerate=False):
         if type(doc) in (list, tuple):
@@ -225,15 +238,30 @@ class SpaceParser(BaseParser):
                     self.printDocument(v, indent + '\t')
                 elif type(v) == list:
                     print '%s%s:' %(indent, self.encode(k))
-                    # indent += '\t'
-                    # for entry in v:
-                    #     self.printDocument(entry, indent)
                     self.printDocument(v, indent + '\t', enumerate)
                 else:
                     print '%s%s:%s' %(indent, self.encode(k), self.encode(v))
 
 
-if __name__ == '__main__':
-    parser = SpaceParser(inputEncoding='WINDOWS-1250', outputEncoding='utf-8')
-    parser.feed(open(sys.argv[1]).read())
-    parser.printDocument(parser.documents)
+    def mapEntries(self, elem, keyMapper=lambda x:x, valueMapper=lambda x:x):
+        if type(elem) in (list, tuple):
+            return [self.mapEntries(entry, keyMapper, valueMapper) for entry in elem]
+
+        d = {}
+        for k, v in elem.items():
+            k = keyMapper(k)
+            if type(v) == dict:
+                d[k] = self.mapEntries(v, keyMapper, valueMapper)
+            elif type(v) == list:
+                d[k] = self.mapEntries(v, keyMapper, valueMapper)
+            else:
+                d[k] = valueMapper(v)
+        return d
+
+
+
+
+# if __name__ == '__main__':
+#     parser = SpaceParser(inputEncoding='WINDOWS-1250', outputEncoding='utf-8')
+#     parser.feed(open(sys.argv[1]).read())
+#     parser.printDocument(parser.documents)

@@ -1,0 +1,45 @@
+RCiWN dla 2814042 Dywity
+
+Dokument             :MS-9444/2013 z dnia 2013.07.12
+IRCW                 :2075
+Rodzaj zapisu        :Obr�t
+Forma obrotu         :Wolny rynek
+Strona sprzedaj�ca   :Osoba prawna
+Strona kupuj�ca      :Osoba fizyczna
+Warto��              :132�000.00 z�
+
+     Nieruchomo��              :lokalowa
+     Opis                      :LOKAL MIESZK. PO�O�ONY NA 2,5 KONDYGNACJI PODDASZU
+                                ,SK�.SI� Z PRZEDPOKOJU, POKOJU, SALONU Z ANEKSEM
+                                KUCHENNYM I �AZIENKI Z WC O POW. U�. 35,62
+                                M.KWORAZ Z LOKALU PIWNICY O POW. 6,01M.KW CENA
+                                LOKALU 131900 Z�.BTUTTO  122129,63 NETTO
+     Ksi�ga wieczysta          :OL1O/00156657/1
+     Obr�b                     :9 - Kie�liny
+     Nr zmiany                 :176/2013
+     Dzia�ki :
+         Numer                 :48/8
+         Powierzchnia          :1129 ( B 1129)
+         Rodzaj prawa          :Wsp�w�asno��
+         Udzia� w prawie       :31/1000
+         adres(y)              :KIE�LINY; LEOPOLDA STAFFA 3
+         Numer                 :49/2
+         Powierzchnia          :577 ( B 577)
+         Rodzaj prawa          :Wsp�w�asno��
+         Udzia� w prawie       :31/1000
+         adres(y)              :KIE�LINY; LEOPOLDA STAFFA 3
+---------------------------------------------------------------------- :
+     Nieruchomo��              :niezabudowana  przeznaczona pod zabudow� inn� ni�
+                                zagrodowa
+     Opis                      :DZ. 47/7 STANOWI PARKING I OZNACZONY JEST JAKO Ti
+                                CENA SPRZEDA�Y 100 Z� BRUTTO W TYM PODATEK VAT 23%
+                                W WYS. 18,70 Z�
+     Obr�b                     :9 - Kie�liny
+     Nr zmiany                 :176/2013
+     Dzia�ki :
+         Numer                 :47/7
+         Powierzchnia          :1039 ( Ti 1039)
+         Funkcja dominuj�ca    :brak danych
+         Rodzaj prawa          :W�asno��
+         Udzia� w prawie       :1/1
+====================================================================== :
