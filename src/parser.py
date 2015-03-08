@@ -106,6 +106,7 @@ class SpaceParser(BaseParser):
     SUBDOCUMENT_END = '----------------------------------------------------------------------'
     EMPTY_LINE = ''
     SUBDOCUMENT_KEY = 'SUBDOCUMENT'
+    LONGEST_KEY = 20
 
     def __self__(self, inputEncoding=None, outputEncoding=None):
         BaseParser.__init__(self, inputEncoding, outputEncoding)
@@ -127,7 +128,8 @@ class SpaceParser(BaseParser):
         # save unique keys for each tag
         if not tag in self.keys:
             self.keys[tag] = set()
-        self.keys[tag].add(value[0])
+        if tag < self.LONGEST_KEY:
+            self.keys[tag].add(value[0])
 
     def parseLine(self, line):
         tag = len(line) - len(line.lstrip())
@@ -225,6 +227,15 @@ class SpaceParser(BaseParser):
             return self.mapEntries(self.pieces, self.encode, self.encode)
         return self.pieces
 
+    def globalKeyset(self):
+        keyset = set()
+        for localKeyset in self.keys.values():
+            keyset = keyset.union(localKeyset)
+
+        for key in (self.header, self.DOCUMENT_END, self.EMPTY_LINE, self.SUBDOCUMENT_END):
+            keyset.remove(key)
+        return keyset
+
     def printDocument(self, doc, indent='\t', enumerate=False):
         if type(doc) in (list, tuple):
             for (entry, num) in zip(doc, xrange(1, len(doc) + 1)):
@@ -259,9 +270,9 @@ class SpaceParser(BaseParser):
         return d
 
 
-
-
-# if __name__ == '__main__':
-#     parser = SpaceParser(inputEncoding='WINDOWS-1250', outputEncoding='utf-8')
-#     parser.feed(open(sys.argv[1]).read())
-#     parser.printDocument(parser.documents)
+if __name__ == '__main__':
+    parser = SpaceParser(inputEncoding='WINDOWS-1250', outputEncoding='utf-8')
+    parser.feed(open(sys.argv[1]).read())
+    # parser.printDocument(parser.output())
+    for key in parser.globalKeyset():
+        print key

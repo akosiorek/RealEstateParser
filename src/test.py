@@ -1,12 +1,24 @@
-import re
+from parser import SpaceParser
+# −*− coding: UTF−8 −*−
 
-line = "Cats are smarter than dogs";
+data = open('../data/gm.txt').read()
+parser = SpaceParser(inputEncoding='Windows-1250', outputEncoding='utf-8')
+parser.feed(data)
+docs = parser.output()
+# print len(docs), docs
 
-searchObj = re.search( r'(.*) are (.*?) .*', line, re.M|re.I)
+budynki = u'Budynki'
+dzialki = u'Dzia\u0142ki'
+lokale = u'Lokale'
 
-if searchObj:
-    print "searchObj.group() : ", searchObj.group()
-    print "searchObj.group(1) : ", searchObj.group(1)
-    print "searchObj.group(2) : ", searchObj.group(2)
-else:
-    print "Nothing found!!"
+keys = (budynki, dzialki, lokale)
+
+# parser.printDocument(docs)
+
+for key in keys:
+    print key
+    for doc in docs:
+        for subdoc in doc[SpaceParser.SUBDOCUMENT_KEY]:
+            # print subdoc
+            if key in subdoc:
+                print subdoc[key]
